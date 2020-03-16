@@ -146,14 +146,14 @@ class DataclassesRenderer:
         is_enum = field.type in enum_names
         suffix = ''
         field_type = field.type
-        print(field.type)
         if is_enum:
             suffix = f'= enum_field({field.type})'
 
         if field.type == 'DateTime':
-            field_type = 'DATETIME_FIELD'
+            field_type = 'datetime'
+            suffix = '=DATETIME_FIELD'
 
-        if field.nullable:
+        elif field.nullable:
             suffix = f'= {field.default_value}'
 
         buffer.write(f'{field.name}: {field_type} {suffix}')
