@@ -154,7 +154,7 @@ class DataclassesRenderer:
             suffix = '= DATETIME_FIELD'
             field_type = 'datetime'
 
-        if field.nullable:
+        elif field.nullable:
             suffix = f'= {field.default_value}'
 
         buffer.write(f'{field.name}: {field_type} {suffix}')
