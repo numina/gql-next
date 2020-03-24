@@ -2,7 +2,7 @@ from typing import Any, List, Mapping, Union, cast
 from dataclasses import dataclass, field
 
 from graphql import GraphQLSchema, validate, parse, get_operation_ast, visit, Visitor, TypeInfo, TypeInfoVisitor, \
-    GraphQLNonNull, is_scalar_type, GraphQLList, OperationDefinitionNode, NonNullTypeNode, TypeNode, GraphQLEnumType, \
+    GraphQLNonNull, is_scalar_type, GraphQLList, OperationDefinitionNode, NonNullTypeNode, TypeNode, GraphQLEnumType, ListTypeNode, \
     is_enum_type
 
 
@@ -206,10 +206,20 @@ class FieldToTypeMatcherVisitor(Visitor):
             'Int': 'int',
             'Float': 'float',
             'Boolean': 'bool',
-            'DateTime': 'DateTime'
+            'DateTime': 'datetime'
         }
 
-        mapping = mapping.get(var_type.name.value, var_type.name.value)
+        if isinstance(var_type, ListTypeNode):
+            print(dir(var_type.type))
+            var_type = var_type.type
+            if isinstance(var_type, NonNullTypeNode):
+                scalar = scalar.of_type
+                nullable = False
+
+            mapping = f'List[{mapping.get(var_type.name.value, var_type.name.value)}]'
+        else:
+            mapping = mapping.get(var_type.name.value, var_type.name.value)
+        print(nullable)
         return mapping, nullable, var_type
 
 
