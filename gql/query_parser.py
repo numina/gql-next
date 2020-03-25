@@ -210,7 +210,6 @@ class FieldToTypeMatcherVisitor(Visitor):
         }
 
         if isinstance(var_type, ListTypeNode):
-            print(dir(var_type.type))
             var_type = var_type.type
             if isinstance(var_type, NonNullTypeNode):
                 scalar = scalar.of_type
@@ -219,7 +218,6 @@ class FieldToTypeMatcherVisitor(Visitor):
             mapping = f'List[{mapping.get(var_type.name.value, var_type.name.value)}]'
         else:
             mapping = mapping.get(var_type.name.value, var_type.name.value)
-        print(nullable)
         return mapping, nullable, var_type
 
 
