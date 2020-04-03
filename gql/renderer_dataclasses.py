@@ -152,6 +152,8 @@ class DataclassesRenderer:
 
         if field.type == 'DateTime':
             suffix = '= DATETIME_FIELD'
+            if(field.nullable):
+                suffix = "= field(default={default}, metadata={{'dataclasses_json': {{'encoder': datetime.isoformat, 'decoder': datetime.fromisoformat, 'mm_field': marshmallow_fields.DateTime(format='iso')}}}})".format(default = field.default_value)
             field_type = 'datetime'
 
         elif field.nullable:
