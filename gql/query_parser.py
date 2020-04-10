@@ -181,13 +181,16 @@ class FieldToTypeMatcherVisitor(Visitor):
             'DateTime': 'DateTime'
         }
 
-        if isinstance(scalar, GraphQLList):
-            scalar = scalar.of_type
-            if isinstance(scalar, GraphQLNonNull):
-                scalar = scalar.of_type
-                nullable = False
 
-            mapping = f'List[{mapping.get(str(scalar), str(scalar))}]'
+        if isinstance(scalar, GraphQLList):
+            ret_start = ""
+            ret_end = ""
+            while(isinstance(scalar, GraphQLList) ):
+                scalar = scalar.of_type
+                ret_start += "List["
+                ret_end += "]"
+
+            mapping = ret_start + mapping.get(str(scalar), str(scalar)) + ret_end
         else:
             mapping = mapping.get(str(scalar), str(scalar))
 
